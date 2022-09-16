@@ -13,4 +13,3 @@ class Progress(Enum):
     NONE = 0
     STARTED = 1
     DONE = 2
-

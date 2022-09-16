@@ -14,10 +14,18 @@ class HomeworkElement:
     def progress_to_string(self) -> str:
         return self.progress.name.title()
 
-    def to_csv(self) -> str:
-        return "{},{},{},{}".format(
+    def to_list(self) -> list:
+        return list([
             self.day.value,
             self.course,
             self.info,
-            self.progress.value,
-        )
+            self.progress.value
+        ])
+
+#    def to_csv(self) -> str:
+#        return "{},{},{},{}".format(
+#            self.day.value,
+#            self.course,
+#            self.info,
+#            self.progress.value,
+#        )

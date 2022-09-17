@@ -3,6 +3,7 @@ from model.Enums import Day, Progress
 
 @dataclass
 class HomeworkElement:
+    """Class that stores the information related to a single course's homework."""
     day: Day
     course: str
     info: str

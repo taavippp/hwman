@@ -4,7 +4,8 @@ from dataclasses import dataclass
 import csv
 
 @dataclass
-class DataManager:
+class FileController:
+    """Class for reading and writing .csv files related to the program."""
     path: str
 
     def read_data(self) -> list[HomeworkElement]:

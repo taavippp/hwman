@@ -1,7 +1,9 @@
-from model.HomeworkElement import HomeworkElement
-from model.Enums import Day, Progress
 from dataclasses import dataclass
+from datetime import datetime
 import csv
+
+from model.HomeworkElement import HomeworkElement
+from model.Progress import Progress
 
 @dataclass
 class FileController:
@@ -14,7 +16,10 @@ class FileController:
             reader = csv.DictReader(file)
             for row in reader:
                 data.append(HomeworkElement(
-                    Day(int(row["Day"])),
+                    datetime.strptime(
+                        row["Date"],
+                        "%d-%m-%Y %H:%M"
+                    ),
                     str(row["Course"]),
                     str(row["Info"]),
                     Progress(int(row["Progress"])),
@@ -25,10 +30,30 @@ class FileController:
         with open(self.path, "w", newline = "") as file:
             writer = csv.writer(file)
             writer.writerow([
-                "Day",
+                "Date",
                 "Course",
                 "Info",
                 "Progress",
             ])
             for element in data:
                 writer.writerow(element.to_list())
+    
+    def read_config(self) -> dict[str, ConfigElement]:
+        config = dict()
+        with open(self.path, "r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                config[row["Variable"]] = row["Value"]
+        return config
+    
+    def write_config(self, config: dict[str, object]) -> None:
+        with open(self.path, "w", newline = "") as file:
+            writer = csv.writer(file)
+            writer.writerow([
+                "Variable",
+                "Value",
+            ])
+            for variable in config:
+                writer.writerow([
+                    variable, config[variable]
+                ])

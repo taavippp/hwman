@@ -1,11 +1,12 @@
-# <u>h</u>ome<u>w</u>ork <u>man</u>ager
+# **h**ome**w**ork **man**ager
 
 user will be able to:
 
 -   add new entries
 -   modify properties of entries
-    -   if progress is set to DONE and today is the entry's day, it is reset
 -   remove entries
-    -   ask for permission
 -   get list of what is done, what isn't
+-   change settings
+    -   default file
+    -   24 or 12 hour time
 -   exit program

@@ -1,6 +1,7 @@
-from model.Enums import Progress
-from controller.FileController import FileController
 import unittest
+
+from controller.FileController import FileController
+from model.Progress import Progress
 
 class FileControllerTests(unittest.TestCase):
     controller: FileController = FileController("test/TEST.csv")

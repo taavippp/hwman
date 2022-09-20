@@ -2,7 +2,7 @@ class ConfigController:
     config: dict[str, object] = dict()
 
     valid_vars: dict = {
-        "default_file": str,
+        "file": str,
         "display_time_24": bool,
         "reminders": bool,
     }

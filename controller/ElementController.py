@@ -9,7 +9,7 @@ class ElementController:
     """Class for managing and manipulating HomeworkElements at runtime."""
     data: list[HomeworkElement]
 
-    def get_data(self) -> list[HomeworkElement]:
+    def get_all(self) -> list[HomeworkElement]:
         return self.data
 
     def add(self, element: HomeworkElement) -> None:

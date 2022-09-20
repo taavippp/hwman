@@ -1,12 +1,24 @@
 # **h**ome**w**ork **man**ager
 
-user will be able to:
+## commands
 
--   add new entries
--   modify properties of entries
--   remove entries
--   get list of what is done, what isn't
--   change settings
-    -   default file
-    -   24 or 12 hour time
--   exit program
+-   add +
+-   edit
+-   delete
+-   list
+
+---
+
+-   save - scrap?
+-   load - scrap?
+-   info +
+
+---
+
+-   settings
+-   set
+
+---
+
+-   help - Typer auto-generates?
+-   exit

@@ -9,16 +9,7 @@
 
 ---
 
--   save - scrap?
--   load - scrap?
 -   info +
-
----
-
 -   settings
 -   set
-
----
-
--   help - Typer auto-generates?
 -   exit

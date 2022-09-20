@@ -4,25 +4,48 @@ from controller.FileController import FileController
 from model.Progress import Progress
 
 class FileControllerTests(unittest.TestCase):
-    controller: FileController = FileController("test/TEST.csv")
+    data_control: FileController = FileController("test/TESTDATA.csv")
     names: tuple = ("Course One", "Science")
 
-    def test_FileController_read_len(self):
-        data = self.controller.read_data()
+    config_control: FileController = FileController("test/TESTCONFIG.json")
+
+    def get_data(self):
+        return self.data_control.read_data()
+
+    def test_FileController_read_data_len(self):
+        data = self.get_data()
         self.assertEqual(len(data), 3)
     
-    def test_FileController_read_values(self):
-        data = self.controller.read_data()
+    def test_FileController_read_data(self):
+        data = self.get_data()
         self.assertTrue(data[0].course in self.names)
         self.assertEqual(data[1].progress, Progress.NONE)
         self.assertEqual(data[2].info, "No info again")
     
-    def test_FileController_write_values(self):
-        def set_data():
-            return self.controller.read_data()
-        data = set_data()
+    def test_FileController_write_data(self):
+        data = self.get_data()
         new_value = self.names[1] if (data[0].course == self.names[0]) else self.names[0]
         data[0].course = new_value
-        self.controller.write_data(data)
-        data = set_data()
+        self.data_control.write_data(data)
+        data = self.get_data()
         self.assertEqual(data[0].course, new_value)
+
+    def test_FileController_read_config(self):
+        config = self.config_control.read_config()
+        keys = list(config.keys())
+        self.assertTrue("default_file" in keys)
+        self.assertTrue("display_time_24" in keys)
+        self.assertTrue("reminders" in keys)
+        self.assertEqual(config["default_file"], "test/TESTDATA.csv")
+        self.assertEqual(config["display_time_24"], True)
+        self.assertEqual(config["reminders"], True)
+    
+    def test_FileController_write_config(self):
+        config = self.config_control.read_config()
+        config["default_file"] = "MICHAEL.json"
+        self.config_control.write_config(config)
+        
+        config = self.config_control.read_config()
+        self.assertEqual(config["default_file"], "MICHAEL.json")
+        config["default_file"] = "test/TESTDATA.csv"
+        self.config_control.write_config(config)

@@ -1,0 +1,5 @@
+{
+    "default_file": "test/TESTDATA.csv",
+    "display_time_24": true,
+    "reminders": true
+}

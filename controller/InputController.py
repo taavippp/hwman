@@ -1,6 +1,7 @@
 import sys
 from ElementController import ElementController
 
+#I think this file is getting scrapped!
 class InputController:
     """Class that handles user input."""
     keywords: dict[str, function] = {

@@ -1,3 +1,4 @@
+from rich.table import Table as RichTable
 from datetime import datetime
 from rich import print
 
@@ -44,6 +45,11 @@ class TerminalController:
         self.data_file.write_data(
             self.data.get_all()
         )
+        print(
+            "Saved file: [blue]{}[/blue]".format(
+                self.data_file.path
+            )
+        )
 
     def info(self) -> None:
         """Displays information about the program."""
@@ -79,3 +85,88 @@ class TerminalController:
         print(
             "Added new homework: [blue]{}[/blue]".format(course)
         )
+    
+    # The list of entries would start at 1.    
+    def edit(self, index: int, param: str, value: datetime | str | Progress):
+        self.data.edit(index - 1, param, value)
+        print(
+            "Changed parameter [blue]'{}'[/blue] at index {} to [blue]'{}'[/blue]".format(
+                param, index, value       
+            )
+        )
+
+    def delete(self, index: int):
+        self.data.remove(index - 1)
+        print(
+            "Removed element at index {}".format(
+                index
+            )
+        )
+    
+    def find(self, param: str, value: datetime | str | Progress):
+        result = self.data.find(param, value)
+        table = RichTable(
+            "Date",
+            "Course",
+            "Info",
+            "Progress"
+        )
+        for element in result:
+            table.add_row(
+                element.date_to_string(),
+                element.course,
+                element.info,
+                element.progress_to_string()
+            )
+        print(
+            "[bold yellow]Found {} homework(s):[/bold yellow]".format(
+                len(result)
+            ),
+            table
+        )
+    
+    def list(self):
+        table = RichTable(
+            "Date",
+            "Course",
+            "Info",
+            "Progress"
+        )
+        for element in self.data.get_all():
+            table.add_row(
+                element.date_to_string(),
+                element.course,
+                element.info,
+                element.progress_to_string()
+            )
+        print(
+            "[bold yellow]List of homework:[/bold yellow]",
+            table
+        )
+    
+    def settings(self):
+        table = RichTable(
+            "Variable",
+            "Value"
+        )
+        settings = self.config.get_all()
+        for key in settings:
+            table.add_row(
+                key,
+                str(settings[key])
+            )
+        print(
+            "[bold yellow]Settings:[/bold yellow]",
+            table
+        )
+    
+    def set(self, var: str, value: str | bool):
+        self.config.set(var, value)
+        print(
+            "Set variable [blue]{}[/blue] to [blue]{}[/blue]".format(
+                var, value
+            )
+        )
+
+test = TerminalController(False)
+test.save()

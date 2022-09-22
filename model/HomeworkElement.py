@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 
 from model.Progress import Progress
@@ -25,17 +25,23 @@ class HomeworkElement:
         return self.date.strftime(
             "%d{0}%m{0}%Y %H{1}%M".format(chars[0], chars[1])
         )
+    
+    #untested
+    def _now_and_date_diff_in_days(self) -> int:
+        return (datetime.now() - self.date).days
 
+    #unused
     def date_to_weekday(self) -> str:
         return self.Weekday(
             self.date.isoweekday()
         ).name.title()
 
-    def date_to_csv(self) -> str:
-        return self._format_date(("-", ":"))
-
+    #use above here
     def date_to_string(self) -> str:
         return self._format_date((".", ":"))
+
+    def date_to_csv(self) -> str:
+        return self._format_date(("-", ":"))
 
     def progress_to_string(self) -> str:
         return self.progress.name.title()

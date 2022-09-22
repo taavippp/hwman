@@ -1,15 +1,21 @@
-# **h**ome**w**ork **man**ager
+# HomeWork MANager
 
 ## commands
 
 -   add +
--   edit
--   delete
--   list
+-   edit +
+-   delete +
+-   find +
+-   list +
 
 ---
 
 -   info +
--   settings
--   set
--   exit
+-   settings +
+-   set +
+
+---
+
+TODO:
+
+-   make reminders and display_time_24 work

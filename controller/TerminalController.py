@@ -1,5 +1,5 @@
 from rich.table import Table as RichTable
-from datetime import datetime
+from datetime import date, datetime
 from rich import print
 
 from controller.ElementController import ElementController
@@ -25,7 +25,17 @@ class TerminalController:
         
         self.config = ConfigController(self.conf_file.read_config())
         self.load(
-            self.config.get_all()["file"]
+            self.config.get("file")
+        )
+        if (self.config.get("reminders")):
+            if (datetime.strptime(
+                self.config.get("date_opened"),
+                "%d-%m-%Y"
+            ) <= datetime.now()):
+                self.reminder()
+        self.set(
+            "date_opened",
+            date.strftime(date.today(), "%d-%m-%Y")
         )
 
     def load(self, path) -> None:
@@ -103,45 +113,41 @@ class TerminalController:
             )
         )
     
-    def find(self, param: str, value: datetime | str | Progress):
-        result = self.data.find(param, value)
+    def print_data(self, data: list[HomeworkElement], message: str):
         table = RichTable(
+            "ID",
             "Date",
             "Course",
             "Info",
             "Progress"
         )
-        for element in result:
+        for index, element in enumerate(data):
             table.add_row(
+                "{}.".format(index + 1),
                 element.date_to_string(),
                 element.course,
                 element.info,
                 element.progress_to_string()
             )
         print(
-            "[bold yellow]Found {} homework(s):[/bold yellow]".format(
-                len(result)
+            message.format(
+                len(data)
             ),
             table
         )
+
+    def find(self, param: str, value: datetime | str | Progress):
+        result = self.data.find(param, value)
+        self.print_data(
+            result,
+            "[bold yellow]Found {} element(s):[/bold yellow]"
+        )
+    
     
     def list(self):
-        table = RichTable(
-            "Date",
-            "Course",
-            "Info",
-            "Progress"
-        )
-        for element in self.data.get_all():
-            table.add_row(
-                element.date_to_string(),
-                element.course,
-                element.info,
-                element.progress_to_string()
-            )
-        print(
-            "[bold yellow]List of homework:[/bold yellow]",
-            table
+        self.print_data(
+            self.data.get_all(),
+            "[bold yellow]List has {} element(s):[/bold yellow]"
         )
     
     def settings(self):
@@ -167,6 +173,23 @@ class TerminalController:
                 var, value
             )
         )
+    
+    def sort(self, param: str):
+        self.data.sort(param)
+        print("Sorted elements by [blue]{}[/blue].".format(
+            param
+        ))
+    
+    def reminder(self):
+        result = filter(
+            lambda element: (
+                0 >= element.now_and_date_diff_in_days() > -3
+            ),
+            self.data.get_all()
+        )
+        self.print_data(
+            list(result),
+            "[bold yellow]List of [red]imminent[/red] homework:[/bold yellow]"
+        )
 
-test = TerminalController(False)
-test.save()
+test = TerminalController(True)

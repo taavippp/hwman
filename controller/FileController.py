@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 import csv
 import json
 
@@ -39,7 +39,7 @@ class FileController:
             for element in data:
                 writer.writerow(element.to_list())
     
-    def read_config(self) -> dict[str, str | bool]:
+    def read_config(self) -> dict[str, str | bool | date]:
         with open(self.path, "r") as file:
             config: dict = json.load(file)
         return config

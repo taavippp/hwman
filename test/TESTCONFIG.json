@@ -1,5 +1,5 @@
 {
     "file": "test/TESTDATA.csv",
-    "display_time_24": true,
+    "date_opened": "23-09-2022",
     "reminders": true
 }

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import unittest
 
 from model.HomeworkElement import HomeworkElement
@@ -18,7 +18,12 @@ class HomeworkElementTests(unittest.TestCase):
         self.assertEqual(self.element.date_to_weekday(), "Tuesday")
 
     def test_date_to_string(self):
-        self.assertEqual(self.element.date_to_string(), "03.05.2022 00:00")
+        self.assertEqual(self.element.date_to_string(), "[gray]03.05.2022 00:00[/gray]")
+        self.element.date = datetime(2022, 9, 27)
+        self.assertEqual(self.element.date_to_string(), "Tuesday")
+        self.element.date = datetime(2022, 9, 24)
+        self.assertEqual(self.element.date_to_string(), "[bold red]Saturday[/bold red]")
+        self.element.date = datetime(2022, 5, 3)
 
     def test_date_to_csv(self):
         self.assertEqual(self.element.date_to_csv(), "03-05-2022 00:00")

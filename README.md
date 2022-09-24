@@ -7,15 +7,10 @@
 -   delete +
 -   find +
 -   list +
+-   sort +
 
 ---
 
 -   info +
 -   settings +
 -   set +
-
----
-
-TODO:
-
--   make reminders and display_time_24 work

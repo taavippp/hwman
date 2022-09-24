@@ -3,7 +3,7 @@ class ConfigController:
 
     valid_vars: dict = {
         "file": str,
-        "display_time_24": bool,
+        "date_opened": str,
         "reminders": bool,
     }
 
@@ -14,6 +14,9 @@ class ConfigController:
     
     def get_all(self) -> dict[str, str | bool]:
         return self.config
+    
+    def get(self, param: str) -> str | bool:
+        return self.config[param]
 
     def __init__(self, param_dict: dict[str, object]) -> None:
         for var in param_dict:

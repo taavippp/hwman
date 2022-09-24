@@ -26,19 +26,30 @@ class HomeworkElement:
             "%d{0}%m{0}%Y %H{1}%M".format(chars[0], chars[1])
         )
     
-    #untested
-    def _now_and_date_diff_in_days(self) -> int:
+    def now_and_date_diff_in_days(self) -> int:
         return (datetime.now() - self.date).days
 
-    #unused
     def date_to_weekday(self) -> str:
         return self.Weekday(
             self.date.isoweekday()
         ).name.title()
 
-    #use above here
     def date_to_string(self) -> str:
-        return self._format_date((".", ":"))
+        diff = self.now_and_date_diff_in_days()
+        result: str
+        if (diff > 0):
+            result = "[black]{}[/black]".format(
+                self._format_date((".", ":"))
+            )
+        elif (diff > -3 and diff <= 0):
+            result = "[bold red]{}[/bold red]".format(
+                self.date_to_weekday()
+            )
+        elif (diff > -7 and diff <= -3):
+            result = self.date_to_weekday()
+        else:
+            result = self._format_date((".", ":")) 
+        return result
 
     def date_to_csv(self) -> str:
         return self._format_date(("-", ":"))

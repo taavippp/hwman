@@ -7,7 +7,7 @@ from model.HomeworkElement import HomeworkElement
 from model.Progress import Progress
 
 class ElementControllerTests(unittest.TestCase):
-    reader: FileController = FileController("test/TEST.csv")
+    reader: FileController = FileController("test/TESTDATA.csv")
     controller: ElementController = ElementController(reader.read_data())
     element: HomeworkElement = HomeworkElement(
         datetime(2022, 9, 19), "Hello", "World", Progress.STARTED

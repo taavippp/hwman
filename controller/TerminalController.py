@@ -80,8 +80,11 @@ class TerminalController:
         date: datetime
         try:
             date = datetime.strptime(datestr, "%d.%m.%Y %H:%M")
-        except:
-            date = datetime.strptime(datestr, "%d.%m.%Y")
+        except ValueError:
+            try:
+                date = datetime.strptime(datestr, "%d.%m.%Y")
+            except ValueError:
+                date = datetime.now()
 
         element = HomeworkElement(
             date,
@@ -191,5 +194,3 @@ class TerminalController:
             list(result),
             "[bold yellow]List of [red]imminent[/red] homework:[/bold yellow]"
         )
-
-test = TerminalController(True)

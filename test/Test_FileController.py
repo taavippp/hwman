@@ -1,3 +1,4 @@
+from datetime import date, datetime
 import unittest
 
 from controller.FileController import FileController
@@ -33,19 +34,20 @@ class FileControllerTests(unittest.TestCase):
     def test_FileController_read_config(self):
         config = self.config_control.read_config()
         keys = list(config.keys())
-        self.assertTrue("default_file" in keys)
-        self.assertTrue("display_time_24" in keys)
+        print(keys)
+        self.assertTrue("file" in keys)
+        self.assertTrue("date_opened" in keys)
         self.assertTrue("reminders" in keys)
-        self.assertEqual(config["default_file"], "test/TESTDATA.csv")
-        self.assertEqual(config["display_time_24"], True)
+        self.assertEqual(config["file"], "test/TESTDATA.csv")
+        self.assertEqual(config["date_opened"], date.today().strftime("%d-%m-%Y"))
         self.assertEqual(config["reminders"], True)
     
     def test_FileController_write_config(self):
         config = self.config_control.read_config()
-        config["default_file"] = "MICHAEL.json"
+        config["file"] = "MICHAEL.json"
         self.config_control.write_config(config)
         
         config = self.config_control.read_config()
-        self.assertEqual(config["default_file"], "MICHAEL.json")
-        config["default_file"] = "test/TESTDATA.csv"
+        self.assertEqual(config["file"], "MICHAEL.json")
+        config["file"] = "test/TESTDATA.csv"
         self.config_control.write_config(config)

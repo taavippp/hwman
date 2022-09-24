@@ -1,3 +1,4 @@
+from datetime import date
 import unittest
 
 from controller.ConfigController import ConfigController
@@ -17,7 +18,7 @@ class ConfigControllerTests(unittest.TestCase):
         settings = self.config.get_all()
         keys = settings.keys()
         self.assertIn("file", keys)
-        self.assertIn("display_time_24", keys)
+        self.assertIn("date_opened", keys)
         self.assertIn("reminders", keys)
 
     def test_set_config(self):
@@ -25,5 +26,5 @@ class ConfigControllerTests(unittest.TestCase):
         self.assertEqual(self.config.config["file"], "test.json")
         self.config.set("reminders", False)
         self.assertFalse(self.config.config["reminders"])
-        self.config.set("display_time_24", 123)
-        self.assertEqual(self.config.config["display_time_24"], True, "Should not have set to 123.")
+        self.config.set("date_opened", 123)
+        self.assertEqual(self.config.config["date_opened"], date.today().strftime("%d-%m-%Y"), "Should not have set to 123.")

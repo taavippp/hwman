@@ -13,16 +13,30 @@ class HomeworkElementTests(unittest.TestCase):
         "Information",
         Progress.NONE
     )
+    day: timedelta = timedelta(1)
+
+    def weekday_to_str(self, weekday: int) -> str:
+        return HomeworkElement.Weekday(weekday).name.title()
 
     def test_date_to_weekday(self):
         self.assertEqual(self.element.date_to_weekday(), "Tuesday")
 
     def test_date_to_string(self):
-        self.assertEqual(self.element.date_to_string(), "[gray]03.05.2022 00:00[/gray]")
-        self.element.date = datetime(2022, 9, 27)
-        self.assertEqual(self.element.date_to_string(), "Tuesday")
-        self.element.date = datetime(2022, 9, 24)
-        self.assertEqual(self.element.date_to_string(), "[bold red]Saturday[/bold red]")
+        self.assertEqual(self.element.date_to_string(), "[black]03.05.2022 00:00[/black]")
+        new_date = datetime.now() + (self.day * 5)
+        self.element.date = new_date
+        self.assertEqual(
+            self.element.date_to_string(),
+            self.weekday_to_str(new_date.isoweekday())
+        )
+        new_date = datetime.now() + (self.day * 1)
+        self.element.date = new_date
+        self.assertEqual(
+            self.element.date_to_string(),
+            "[bold red]{}[/bold red]".format(
+                self.weekday_to_str(new_date.isoweekday())
+            )
+        )
         self.element.date = datetime(2022, 5, 3)
 
     def test_date_to_csv(self):

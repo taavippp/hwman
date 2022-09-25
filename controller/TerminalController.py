@@ -28,15 +28,42 @@ class TerminalController:
             self.config.get("file")
         )
         if (self.config.get("reminders")):
-            if (datetime.strptime(
+            date_opened = datetime.strptime(
                 self.config.get("date_opened"),
                 "%d-%m-%Y"
-            ) <= datetime.now()):
+            ).date()
+            today = date.today()
+
+            if (date_opened < today):
+                self.set(
+                    "date_opened",
+                    date.strftime(date.today(), "%d-%m-%Y")
+                )
+                self.conf_file.write_config(self.config.get_all())
                 self.reminder()
-        self.set(
-            "date_opened",
-            date.strftime(date.today(), "%d-%m-%Y")
-        )
+    
+    def string_to_datetime(self, value: str) -> datetime:
+        date: datetime
+        try:
+            date = datetime.strptime(value, "%d.%m.%Y %H:%M")
+        except ValueError:
+            try:
+                date = datetime.strptime(value, "%d.%m.%Y")
+            except ValueError:
+                print("Invalid value [red]{}[/red]".format(
+                    value
+                ))
+                date = datetime.now()
+        return date
+    
+    def parse_value(self, param: str, value: str | int) -> datetime | str | Progress:
+        match param:
+            case "date":
+                return self.string_to_datetime(value)
+            case "progress":
+                return Progress(int(value))
+            case _:
+                return value
 
     def load(self, path) -> None:
         """Loads a new file and its elements."""
@@ -55,36 +82,35 @@ class TerminalController:
         self.data_file.write_data(
             self.data.get_all()
         )
+        self.conf_file.write_config(
+            self.config.get_all()
+        )
         print(
-            "Saved file: [blue]{}[/blue]".format(
-                self.data_file.path
+            "Saved files [blue]{}[/blue] and [blue]{}[/blue]".format(
+                self.data_file.path,
+                self.conf_file.path
             )
         )
 
     def info(self) -> None:
         """Displays information about the program."""
+        table = RichTable(
+            "File",
+            "Elements",
+            "Test mode"
+        )
+        table.add_row(
+            self.data_file.path,
+            str(len(self.data.get_all())),
+            str(self.testing).lower()
+        )
         print(
-            "File: [blue]{}[/blue]".format(
-                self.data_file.path
-            ),
-            "Elements: [blue]{}[/blue]".format(
-                len(self.data.get_all())
-            ),
-            "Test mode: [blue]{}[/blue]".format(
-                str(self.testing).lower()
-            )
+            table
         )
     
     def add(self, datestr: str, course: str, info: str, progress: int) -> None:
         """Adds new element to the list."""
-        date: datetime
-        try:
-            date = datetime.strptime(datestr, "%d.%m.%Y %H:%M")
-        except ValueError:
-            try:
-                date = datetime.strptime(datestr, "%d.%m.%Y")
-            except ValueError:
-                date = datetime.now()
+        date: datetime = self.string_to_datetime(datestr)
 
         element = HomeworkElement(
             date,
@@ -100,7 +126,13 @@ class TerminalController:
         )
     
     # The list of entries would start at 1.    
-    def edit(self, index: int, param: str, value: datetime | str | Progress):
+    def edit(self, index: int, param: str, value: str | int):
+        """Edits an existing element in the list."""
+        if (param == "date"):
+            value = self.string_to_datetime(value)
+        if (param == "progress"):
+            value = Progress(value)
+        
         self.data.edit(index - 1, param, value)
         print(
             "Changed parameter [blue]'{}'[/blue] at index {} to [blue]'{}'[/blue]".format(
@@ -109,14 +141,22 @@ class TerminalController:
         )
 
     def delete(self, index: int):
+        """Deletes an element in the list."""
         self.data.remove(index - 1)
         print(
             "Removed element at index {}".format(
                 index
             )
         )
+
+#---#---#---#---#---#---#---#---#---#
     
     def print_data(self, data: list[HomeworkElement], message: str):
+        if (len(data) == 0):
+            print(
+                "No elements to show."
+            )
+            return
         table = RichTable(
             "ID",
             "Date",
@@ -139,21 +179,24 @@ class TerminalController:
             table
         )
 
-    def find(self, param: str, value: datetime | str | Progress):
+    def find(self, param: str, value: str | int):
+        """Shows elements with the given parameters."""
+        value = self.parse_value(param, value)
         result = self.data.find(param, value)
         self.print_data(
             result,
-            "[bold yellow]Found {} element(s):[/bold yellow]"
+            "[bold green]Found {} element(s):[/bold green]"
         )
     
-    
     def list(self):
+        """Shows all of the elements."""
         self.print_data(
             self.data.get_all(),
-            "[bold yellow]List has {} element(s):[/bold yellow]"
+            "[bold green]List has {} element(s):[/bold green]"
         )
     
     def settings(self):
+        """Shows all the configurations."""
         table = RichTable(
             "Variable",
             "Value"
@@ -165,11 +208,12 @@ class TerminalController:
                 str(settings[key])
             )
         print(
-            "[bold yellow]Settings:[/bold yellow]",
+            "[bold green]Settings:[/bold green]",
             table
         )
     
     def set(self, var: str, value: str | bool):
+        """Changes a value in the configurations."""
         self.config.set(var, value)
         print(
             "Set variable [blue]{}[/blue] to [blue]{}[/blue]".format(
@@ -178,6 +222,7 @@ class TerminalController:
         )
     
     def sort(self, param: str):
+        """Sorts the list by given parameter."""
         self.data.sort(param)
         print("Sorted elements by [blue]{}[/blue].".format(
             param
@@ -192,5 +237,5 @@ class TerminalController:
         )
         self.print_data(
             list(result),
-            "[bold yellow]List of [red]imminent[/red] homework:[/bold yellow]"
+            "[bold green]List of [red]imminent[/red] homework:[/bold green]"
         )

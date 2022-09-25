@@ -1,4 +1,5 @@
 {
     "file": "DATA.csv",
-    "reminders": true
+    "reminders": true,
+    "date_opened": "25-09-2022"
 }

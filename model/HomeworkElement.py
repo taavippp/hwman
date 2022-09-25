@@ -38,7 +38,7 @@ class HomeworkElement:
         diff = self.now_and_date_diff_in_days()
         result: str
         if (diff > 0):
-            result = "[black]{}[/black]".format(
+            result = "[yellow]{}[/yellow]".format(
                 self._format_date((".", ":"))
             )
         elif (diff > -3 and diff <= 0):

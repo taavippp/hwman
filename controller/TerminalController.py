@@ -128,15 +128,12 @@ class TerminalController:
     # The list of entries would start at 1.    
     def edit(self, index: int, param: str, value: str | int):
         """Edits an existing element in the list."""
-        if (param == "date"):
-            value = self.string_to_datetime(value)
-        if (param == "progress"):
-            value = Progress(value)
+        parsed_value = self.parse_value(param, value)
         
-        self.data.edit(index - 1, param, value)
+        self.data.edit(index - 1, param, parsed_value)
         print(
             "Changed parameter [blue]'{}'[/blue] at index {} to [blue]'{}'[/blue]".format(
-                param, index, value       
+                param, index, parsed_value
             )
         )
 
@@ -181,8 +178,8 @@ class TerminalController:
 
     def find(self, param: str, value: str | int):
         """Shows elements with the given parameters."""
-        value = self.parse_value(param, value)
-        result = self.data.find(param, value)
+        parsed_value = self.parse_value(param, value)
+        result = self.data.find(param, parsed_value)
         self.print_data(
             result,
             "[bold green]Found {} element(s):[/bold green]"

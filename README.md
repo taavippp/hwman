@@ -1,16 +1,24 @@
 # HomeWork MANager
 
-## commands
+A homework manager that uses the terminal.
 
--   add +
--   edit +
--   delete +
--   find +
--   list +
--   sort +
+## Commands
+
+### For managing homework
+
+-   info
+-   add
+-   edit
+-   delete
+-   find
+-   list
+-   sort
+
+### For managing settings
+
+-   settings
+-   set
 
 ---
 
--   info +
--   settings +
--   set +
+`py -m main --help`

@@ -19,7 +19,7 @@ class TerminalController:
 
     def __init__(self, testing: bool = False) -> None:
         self.testing = testing
-        self.conf_file = FileController("CONFIG.json")
+        self.conf_file = FileController("user/CONFIG.json")
         if (testing):
             self.conf_file = FileController("test/TESTCONFIG.json")
         
